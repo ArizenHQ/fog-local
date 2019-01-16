@@ -76,6 +76,10 @@ module Fog
           end
         end
 
+        def url(*)
+          path
+        end
+
         def save(options = {})
           requires :body, :directory, :key
 

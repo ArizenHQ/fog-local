@@ -45,6 +45,41 @@ Shindo.tests('Storage[:local] | file', ["local"]) do
       end
   end
 
+  tests('#url') do
+    tests('when connection has an endpoint').
+      returns(true) do
+        @options[:endpoint] = 'http://example.com/files'
+
+        connection = Fog::Local::Storage.new(@options)
+        directory = connection.directories.new(:key => 'directory')
+        file = directory.files.new(:key => 'file.txt')
+
+        !file.url.nil?
+      end
+
+    tests('when connection has no endpoint').
+      returns(true) do
+        @options[:endpoint] = nil
+
+        connection = Fog::Local::Storage.new(@options)
+        directory = connection.directories.new(:key => 'directory')
+        file = directory.files.new(:key => 'file.txt')
+
+        !file.url.nil?
+      end
+
+    tests('when file path has escapable characters').
+      returns(true) do
+        @options[:endpoint] = 'http://example.com/files'
+
+        connection = Fog::Local::Storage.new(@options)
+        directory = connection.directories.new(:key => 'my directory')
+        file = directory.files.new(:key => 'my file.txt')
+
+        !file.url.nil?
+      end
+  end
+
   tests('#save') do
     tests('creates non-existent subdirs') do
       returns(true) do
